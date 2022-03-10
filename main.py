@@ -6,6 +6,10 @@ import random
 import numpy as np
 import pickle
 
+from pika_client import PikaClient
+from schema import MessageSchema
+
+from fastapi import Request
 
 app = FastAPI()
 
@@ -14,6 +18,14 @@ if __name__ == '__main__':
     uvicorn.run(app, host="0.0.0.0", port=8080)
 
 model_pick = pickle.load(open('model.pkl', 'rb'))
+
+
+@app.post('/send-message')
+async def send_message(payload: MessageSchema, request: Request):
+    request.app.pika_client.send_message(
+        {"message": payload.message}
+    )
+    return {"status": "ok"}
 
 
 @app.get("/")
@@ -59,6 +71,3 @@ def get_book_prediction():
         "status": 200,
         "docs": lit
     }
-
-
-@app.get()
