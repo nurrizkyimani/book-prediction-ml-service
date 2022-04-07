@@ -1,21 +1,14 @@
 from fastapi import FastAPI
-from flask import jsonify, request
 import uvicorn
-from random import seed
-import random
 import numpy as np
-import pickle
-from kafka import KafkaProducer
 import pandas as pd
 import tensorflow as tf
 from tensorflow import keras
-from fastapi import Request
 from redis_om import get_redis_connection
 from fastapi.middleware.cors import CORSMiddleware
 
 
 app = FastAPI()
-
 
 app.add_middleware(
     CORSMiddleware,
@@ -32,6 +25,9 @@ redis = get_redis_connection(
     decode_responses=True
 )
 
+key = 'test_union'
+group = 'inventory-group'
+
 
 @app.get("/")
 async def root():
@@ -42,7 +38,8 @@ example_dict = {'name': 'ricky', 'age': 12}
 
 @app.get("/random_streamline")
 async def streaming_prediction_to_database():
-    redis.xadd("test_union", example_dict, "*")
+    results = redis.xreadgroup(group, key, {key: '>'}, None)
+    print(results)
     return {"message": "send a data to redis pipeline :)"}
 
 
@@ -70,6 +67,8 @@ async def get_book_prediction():
     lit = []
     for key, value in bi.items():
         lit.append(value)
+
+    redis.xadd("test_union", lit[0], "*")
 
     return {
         "status": 200,

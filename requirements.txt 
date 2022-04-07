@@ -2,3 +2,4 @@ redis
 
 redis-om==0.0.20
 fastapi>=0.70.0
+uvicorn==0.17.6
