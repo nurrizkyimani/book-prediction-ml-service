@@ -40,7 +40,7 @@ while True:
                 }
 
                 # Add a new doc in collection 'cities' with ID 'LA'
-                db.collection(u'books').document(u'first').set(data)
+                db.collection(u'books').add(data)
 
     except Exception as e:
         print(str(e))
