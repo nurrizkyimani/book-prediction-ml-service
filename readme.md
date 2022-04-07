@@ -17,3 +17,16 @@ NIM : 18/429294/PA/18685
 [v] add model machine learning
 [v] Add message queue, I am using rabit mq.  
 [v] Add Rest API
+
+# How to 
+
+install requirement.txt
+``` pip3 install requirement.txt```
+
+run the main.py 
+``` python3 main.py```
+
+run consumer.py 
+``` python3 consumer.py```
+
+the result data send, is in the firebase
